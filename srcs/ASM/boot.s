@@ -17,7 +17,6 @@ section .text
 	start:
 		mov esp, stack_top
 		call kernel_main
-		hlt
 
 section .bss
 	align 16

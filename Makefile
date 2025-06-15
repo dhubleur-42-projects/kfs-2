@@ -3,11 +3,20 @@ CFLAGS		=	-m32 -Wall -Wextra -Werror -fno-builtin -fno-exceptions -fno-stack-pro
 INCLUDES	=	-I includes/
 C_SRCS		=	\
 				kernel.c \
-				display.c
+				display.c \
+				io.c \
+				$(addprefix interrupts/, \
+					idt.c \
+					pic.c \
+					keyboard.c \
+					interrupts.c \
+				)
 
 ASMC		=	nasm
 ASMFLAGS	=	-f elf32
-ASM_SRCS	=	boot.s
+ASM_SRCS	=	\
+				boot.s \
+				idt.s
 
 C_OBJS		=	$(C_SRCS:.c=.o)
 ASM_OBJS	=	$(ASM_SRCS:.s=.o)
