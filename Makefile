@@ -16,7 +16,7 @@ ASMC		=	nasm
 ASMFLAGS	=	-f elf32
 ASM_SRCS	=	\
 				boot.s \
-				idt.s
+				interrupts.s
 
 C_OBJS		=	$(C_SRCS:.c=.o)
 ASM_OBJS	=	$(ASM_SRCS:.s=.o)

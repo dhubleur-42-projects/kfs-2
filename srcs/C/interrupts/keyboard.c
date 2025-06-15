@@ -8,4 +8,6 @@ void keyboard_handler() {
     volatile char* vmem = (char*)0xB8000;
     vmem[6] = '0' + (scancode % 10);
     vmem[7] = 0x07;
+
+    send_eoi(1);
 }

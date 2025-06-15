@@ -20,11 +20,16 @@ typedef struct {
 } __attribute__((packed)) idt_ptr_t;
 
 extern void load_idt(idt_ptr_t*);
+extern void default_interrupt_handler_wrapper();
 extern void keyboard_handler_wrapper();
 
 void idt_init();
 void pic_remap();
 void disable_interrupts();
 void enable_interrupts();
+void send_eoi(uint8_t irq);
+
+void default_interrupt_handler();
+void keyboard_handler();
 
 #endif

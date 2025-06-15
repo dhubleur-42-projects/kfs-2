@@ -1,5 +1,7 @@
 #include "interrupts.h"
 
+extern void debug_print(const char* str);
+
 idt_entry_t idt[IDT_SIZE];
 idt_ptr_t idtp;
 
@@ -18,14 +20,13 @@ void idt_init() {
     idtp.limit = sizeof(idt_entry_t) * IDT_SIZE - 1;
     idtp.base = (uint32_t)&idt;
 
-	// Clear the IDT
+	// Set all IDT entries to the default interrupt handler
     for (int i = 0; i < IDT_SIZE; i++) {
-        idt_set_gate(i, 0);
+        idt_set_gate(i, (uint32_t)default_interrupt_handler_wrapper);
     }
 
     load_idt(&idtp);
-
 	pic_remap();
 
-	idt_set_gate(33, (uint32_t)keyboard_handler_wrapper);
+    idt_set_gate(33, (uint32_t)keyboard_handler_wrapper);
 }
