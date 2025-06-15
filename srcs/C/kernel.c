@@ -1,7 +1,7 @@
+#include "display.h"
+
 void kernel_main() {
-    volatile unsigned char *video_memory = (unsigned char *)0xB8000; // Video memory address
-    video_memory[0] = '4';
-    video_memory[1] = 0x07;
-    video_memory[2] = '2';
-    video_memory[3] = 0x07;
+	vga_clear();
+    vga_putchar(0, 0, vga_color_char('4', vga_color(VGA_COLOR_LIGHT_RED, VGA_COLOR_BLUE)));
+	vga_putchar(1, 0, vga_color_char('2', vga_color(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_LIGHT_MAGENTA)));
 }

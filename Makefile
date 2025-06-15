@@ -1,6 +1,9 @@
 CC			=	gcc
 CFLAGS		=	-m32 -Wall -Wextra -Werror -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs
-C_SRCS		=	kernel.c
+INCLUDES	=	-I includes/
+C_SRCS		=	\
+				kernel.c \
+				display.c
 
 ASMC		=	nasm
 ASMFLAGS	=	-f elf32
@@ -28,7 +31,7 @@ build/%.o: srcs/C/%.c
 	@if [ ! -d $(dir $@) ]; then\
 		mkdir -p $(dir $@);\
 	fi
-	$(CC) ${CFLAGS} -c $< -o $@
+	$(CC) ${CFLAGS} ${INCLUDES} -c $< -o $@
 
 build/%.o: srcs/ASM/%.s
 	@if [ ! -d $(dir $@) ]; then\
