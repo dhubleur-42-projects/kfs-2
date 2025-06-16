@@ -39,6 +39,7 @@ vga_entry_t vga_color_char(char c, vga_memory_t color);
 vga_entry_t vga_char(char c);
 
 void vga_putchar(int x, int y, vga_entry_t c);
+void vga_printf(int x, int y, vga_memory_t color, const char *fmt, ...);
 void vga_clear(void);
 
 #endif

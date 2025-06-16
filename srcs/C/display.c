@@ -28,3 +28,88 @@ void vga_clear(void) {
 		}
 	}
 }
+
+int vga_print_number(int idx, int num, vga_memory_t color) {
+	if (idx < 0 || idx >= VGA_CAPACITY) return idx;
+
+	if (num == 0) {
+		vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char('0', color));
+		return idx + 1;
+	}
+
+	if (num < 0) {
+		vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char('-', color));
+		num = -num;
+		idx++;
+		if (idx >= VGA_CAPACITY) return idx;
+	}
+
+	int digits[10];
+	int count = 0;
+	while (num > 0 && count < 10) {
+		digits[count++] = num % 10;
+		num /= 10;
+	}
+
+	for (int i = count - 1; i >= 0 && idx < VGA_CAPACITY; --i) {
+		vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char('0' + digits[i], color));
+		idx++;
+	}
+
+	return idx;
+}
+
+int vga_print_string(int idx, const char *str, vga_memory_t color) {
+	if (idx < 0 || idx >= VGA_CAPACITY || str == NULL) return idx;
+
+	for (int i = 0; str[i] != '\0' && idx < VGA_CAPACITY; ++i) {
+		vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char(str[i], color));
+		idx++;
+	}
+
+	return idx;
+}
+
+void vga_printf(int x, int y, vga_memory_t color, const char *fmt, ...) {
+	int idx = x + y * VGA_WIDTH;
+	if (idx < 0 || idx >= VGA_CAPACITY) return;
+
+	uint32_t *va_list = (uint32_t *)(&fmt + 1);
+
+	for (int i = 0; fmt[i] != '\0' && idx < VGA_CAPACITY; ++i) {
+		if (fmt[i] == '%' && fmt[i + 1] != '\0') {
+			switch (fmt[i + 1]) {
+				case 'i':
+				case 'd': {
+					int value = *(int *)va_list;
+					va_list++;
+					idx = vga_print_number(idx, value, color);
+					break;
+				}
+				case 'c': {
+					char c = *(char *)va_list;
+					va_list++;
+					vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char(c, color));
+					idx++;
+					break;
+				}
+				case 's': {
+					const char *str = *(const char **)va_list;
+					va_list++;
+					idx = vga_print_string(idx, str, color);
+					break;
+				}
+				default:
+					vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char(fmt[i], color));
+					idx++;
+					vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char(fmt[i + 1], color));
+					idx++;
+					break;
+			}
+			i++;
+		} else {
+			vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char(fmt[i], color));
+			idx++;
+		}
+	}
+}
