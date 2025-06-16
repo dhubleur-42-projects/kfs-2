@@ -5,6 +5,7 @@ C_SRCS		=	\
 				kernel.c \
 				display.c \
 				io.c \
+				utils.c \
 				$(addprefix interrupts/, \
 					idt.c \
 					pic.c \

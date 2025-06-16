@@ -11,4 +11,9 @@ typedef signed short       int16_t;
 typedef signed int         int32_t;
 typedef signed long long   int64_t;
 
+typedef enum {
+	false = 0,
+	true = 1
+} bool;
+
 #endif
