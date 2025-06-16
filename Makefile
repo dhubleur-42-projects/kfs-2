@@ -19,8 +19,8 @@ ASM_SRCS	=	\
 				boot.s \
 				interrupts.s
 
-C_OBJS		=	$(C_SRCS:.c=.o)
-ASM_OBJS	=	$(ASM_SRCS:.s=.o)
+C_OBJS		=	$(addprefix C/,$(C_SRCS:.c=.o))
+ASM_OBJS	=	$(addprefix ASM/,$(ASM_SRCS:.s=.o))
 _OBJS		=	$(C_OBJS) $(ASM_OBJS)
 OBJS		=	$(addprefix build/,$(_OBJS))
 
@@ -37,13 +37,13 @@ all:	$(KERNEL_ISO)
 $(KERNEL_BIN): $(OBJS)
 	$(LD) $(LDFLAGS) -o $(KERNEL_BIN) $(OBJS)
 
-build/%.o: srcs/C/%.c
+build/C/%.o: srcs/C/%.c
 	@if [ ! -d $(dir $@) ]; then\
 		mkdir -p $(dir $@);\
 	fi
 	$(CC) ${CFLAGS} ${INCLUDES} -c $< -o $@
 
-build/%.o: srcs/ASM/%.s
+build/ASM/%.o: srcs/ASM/%.s
 	@if [ ! -d $(dir $@) ]; then\
 		mkdir -p $(dir $@);\
 	fi
