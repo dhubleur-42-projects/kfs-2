@@ -1,5 +1,8 @@
 CC			=	gcc
 CFLAGS		=	-m32 -Wall -Wextra -Werror -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs
+ifeq ($(BONUS), 1)
+	CFLAGS		+= -D BONUS
+endif
 INCLUDES	=	-I includes/
 C_SRCS		=	\
 				kernel.c \

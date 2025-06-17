@@ -4,6 +4,15 @@
 #include "keyboard.h"
 
 void kernel_main() {
+#ifndef BONUS
+
+	vga_clear();
+	vga_putchar(0, 0, vga_char('4'));
+	vga_putchar(1, 0, vga_char('2'));
+	asm volatile("hlt");
+
+#else
+
 	vga_clear();
 	reset_screens();
 
@@ -29,4 +38,6 @@ void kernel_main() {
 			}
 		}
 	}
+	
+#endif
 }
