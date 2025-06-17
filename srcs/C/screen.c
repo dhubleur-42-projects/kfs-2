@@ -42,19 +42,19 @@ void clear_screen(int index) {
 	}
 	screen->buffer[start_x + screen_x_length + VGA_WIDTH * 2] = vga_color_char('0' + index, text_color2);
 
-	vga_memory_t white_color = vga_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+	vga_memory_t border_color = vga_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 	for (int x = 1; x < VGA_WIDTH - 1; x++) {
-		screen->buffer[x + VGA_WIDTH * 3] = vga_color_char('-', white_color);
-		screen->buffer[x + VGA_WIDTH * 20] = vga_color_char('-', white_color);
+		screen->buffer[x + VGA_WIDTH * 3] = vga_color_char('-', border_color);
+		screen->buffer[x + VGA_WIDTH * 20] = vga_color_char('-', border_color);
 	}
 	for (int y = 3; y < VGA_HEIGHT - 4; y++) {
-		screen->buffer[1 + VGA_WIDTH * y] = vga_color_char('|', white_color);
-		screen->buffer[78 + VGA_WIDTH * y] = vga_color_char('|', white_color);
+		screen->buffer[1 + VGA_WIDTH * y] = vga_color_char('|', border_color);
+		screen->buffer[78 + VGA_WIDTH * y] = vga_color_char('|', border_color);
 	}
-	screen->buffer[1 + VGA_WIDTH * 3] = vga_color_char('#', white_color);
-	screen->buffer[78 + VGA_WIDTH * 3] = vga_color_char('#', white_color);
-	screen->buffer[1 + VGA_WIDTH * 20] = vga_color_char('#', white_color);
-	screen->buffer[78 + VGA_WIDTH * 20] = vga_color_char('#', white_color);
+	screen->buffer[1 + VGA_WIDTH * 3] = vga_color_char('#', border_color);
+	screen->buffer[78 + VGA_WIDTH * 3] = vga_color_char('#', border_color);
+	screen->buffer[1 + VGA_WIDTH * 20] = vga_color_char('#', border_color);
+	screen->buffer[78 + VGA_WIDTH * 20] = vga_color_char('#', border_color);
 
 	vga_memory_t text_color3 = vga_color(VGA_COLOR_LIGHT_CYAN, VGA_COLOR_BLACK);
 
@@ -85,4 +85,66 @@ void switch_screen(int index) {
 
 	current_screen_index = index;
 	print_screen_to_vga(current_screen_index);
+}
+
+void add_to_current_screen(char c) {
+	screen_t *current_screen = &screens[current_screen_index];
+
+	vga_entry_t print_char = vga_char(c);
+	current_screen->buffer[current_screen->cursor_x + VGA_WIDTH * current_screen->cursor_y] = print_char;
+	vga_putchar(current_screen->cursor_x, current_screen->cursor_y, print_char);
+
+	current_screen->cursor_x++;
+	if (current_screen->cursor_x >= 78) {
+		current_screen->cursor_x = 2;
+		current_screen->cursor_y++;
+		if (current_screen->cursor_y >= 20) {
+			current_screen->cursor_y = 4;
+		}
+	}
+}
+
+void add_newline_to_current_screen() {
+	screen_t *current_screen = &screens[current_screen_index];
+
+	current_screen->cursor_x = 2;
+	current_screen->cursor_y++;
+	if (current_screen->cursor_y >= 20) {
+		current_screen->cursor_y = 4;
+	}
+}
+
+void back_cursor(screen_t *screen) {
+	if (screen->cursor_x > 2) {
+		screen->cursor_x--;
+	} else if (screen->cursor_y > 4) {
+		screen->cursor_y--;
+		screen->cursor_x = 77;
+	} else {
+		screen->cursor_x = 77;
+		screen->cursor_y = 19;
+	}
+}
+
+void delete_last_char_from_current_screen() {
+	screen_t *current_screen = &screens[current_screen_index];
+	vga_entry_t empty_char = vga_color_char(' ', vga_color(VGA_COLOR_BLACK, VGA_COLOR_BLACK));
+
+	int init_x = current_screen->cursor_x;
+	int init_y = current_screen->cursor_y;
+	back_cursor(current_screen);
+
+	for (;;) {
+		vga_entry_t cur_char = current_screen->buffer[current_screen->cursor_x + VGA_WIDTH * current_screen->cursor_y];
+		if (cur_char != empty_char) {
+			break;
+		}
+		if (current_screen->cursor_x == init_x && current_screen->cursor_y == init_y) {
+			return;
+		}
+		back_cursor(current_screen);
+	}
+
+	current_screen->buffer[current_screen->cursor_x + VGA_WIDTH * current_screen->cursor_y] = empty_char;
+	vga_putchar(current_screen->cursor_x, current_screen->cursor_y, empty_char);
 }

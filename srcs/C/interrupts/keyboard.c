@@ -3,6 +3,7 @@
 #include "display.h"
 
 bool isLeftShiftPressed = false;
+char lastPressedChar = 0;
 
 char keyboard_get_char(keyboard_key_t key) {
     switch (key) {
@@ -43,6 +44,8 @@ char keyboard_get_char(keyboard_key_t key) {
         case KEYBOARD_KEY_8: return (isLeftShiftPressed ? '*' : '8');
         case KEYBOARD_KEY_9: return (isLeftShiftPressed ? '(' : '9');
         case KEYBOARD_KEY_SPACE: return ' ';
+        case KEYBOARD_KEY_ENTER: return '\n';
+        case KEYBOARD_KEY_BACKSPACE: return '\b';
         default: return '?';
     }
 }
@@ -55,8 +58,14 @@ void keyboard_handler() {
     if (scancode == KEYBOARD_KEY_SHIFT_LEFT) {
         isLeftShiftPressed = (KEYBOARD_EVENT(scancode) == KEY_PRESSED);
     } else if (KEYBOARD_EVENT(scancode) == KEY_PRESSED) {
-        vga_putchar(0, 2, vga_char(keyboard_get_char(key)));
+        lastPressedChar = keyboard_get_char(key);
     }
 
     send_eoi(1);
+}
+
+char get_last_pressed_char() {
+    char c = lastPressedChar;
+    lastPressedChar = 0; // Clear the last pressed character after retrieving it
+    return c;
 }

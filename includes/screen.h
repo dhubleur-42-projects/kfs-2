@@ -16,5 +16,8 @@ void print_screen_to_vga(int index);
 void clear_screen(int index);
 void reset_screens();
 void switch_screen(int index);
+void add_to_current_screen(char c);
+void add_newline_to_current_screen();
+void delete_last_char_from_current_screen();
 
 #endif

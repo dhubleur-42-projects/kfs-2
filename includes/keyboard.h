@@ -58,5 +58,6 @@ typedef enum {
 	((scancode & ~KEY_RELEASED) & 0x7F)
 
 char keyboard_get_char(keyboard_key_t key);
+char get_last_pressed_char();
 
 #endif
