@@ -4,7 +4,7 @@
 # include "types.h"
 # include "display.h"
 
-# define SCREEN_COUNT 10
+# define SCREEN_COUNT 9
 
 typedef struct {
 	uint8_t cursor_x;

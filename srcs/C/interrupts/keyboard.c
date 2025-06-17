@@ -46,6 +46,15 @@ char keyboard_get_char(keyboard_key_t key) {
         case KEYBOARD_KEY_SPACE: return ' ';
         case KEYBOARD_KEY_ENTER: return '\n';
         case KEYBOARD_KEY_BACKSPACE: return '\b';
+        case KEYBOARD_KEY_F1: return 11;
+        case KEYBOARD_KEY_F2: return 12;
+        case KEYBOARD_KEY_F3: return 13;
+        case KEYBOARD_KEY_F4: return 14;
+        case KEYBOARD_KEY_F5: return 15;
+        case KEYBOARD_KEY_F6: return 16;
+        case KEYBOARD_KEY_F7: return 17;
+        case KEYBOARD_KEY_F8: return 18;
+        case KEYBOARD_KEY_F9: return 19;
         default: return '?';
     }
 }

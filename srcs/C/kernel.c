@@ -13,7 +13,9 @@ void kernel_main() {
 	for(;;) {
 		asm volatile("hlt");
 		char c = get_last_pressed_char();
-		if (c != 0) {
+		if (c >= 11 && c <= 19) {
+			switch_screen(c - 11);
+		} else if (c != 0) {
 			switch (c) {
 				case '\n':
 					add_newline_to_current_screen();

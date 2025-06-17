@@ -40,7 +40,7 @@ void clear_screen(int index) {
 	for (int i = 0; i < screen_x_length; i++) {
 		screen->buffer[start_x + i + VGA_WIDTH * 2] = vga_color_char("Screen X"[i], text_color2);
 	}
-	screen->buffer[start_x + screen_x_length + VGA_WIDTH * 2] = vga_color_char('0' + index, text_color2);
+	screen->buffer[start_x + screen_x_length + VGA_WIDTH * 2] = vga_color_char('1' + index, text_color2);
 
 	vga_memory_t border_color = vga_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 	for (int x = 1; x < VGA_WIDTH - 1; x++) {
