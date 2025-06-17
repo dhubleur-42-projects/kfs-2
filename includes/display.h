@@ -31,6 +31,8 @@ typedef uint16_t vga_entry_t;
 # define VGA_MEMORY_SIZE (VGA_CAPACITY * 2)
 # define VGA_ADDRESS 0xB8000
 # define VGA_MEMORY ((volatile vga_entry_t *)VGA_ADDRESS)
+// Use an invisible "red" character to differentiate empty entries from actual space
+# define VGA_EMPTY_ENTRY ((vga_entry_t)0x20 | (VGA_COLOR_RED << 8))
 
 vga_memory_t vga_color(vga_color_e fg, vga_color_e bg);
 vga_memory_t vga_fg_color(vga_color_e fg);

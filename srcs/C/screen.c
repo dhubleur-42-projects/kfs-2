@@ -24,7 +24,7 @@ void clear_screen(int index) {
 	screen->cursor_y = 4;
 
 	for (int i = 0; i < VGA_CAPACITY; i++) {
-		screen->buffer[i] = vga_color_char(' ', vga_color(VGA_COLOR_BLACK, VGA_COLOR_BLACK));
+		screen->buffer[i] = VGA_EMPTY_ENTRY;
 	}
 
 	vga_memory_t text_color = vga_color(VGA_COLOR_BLUE, VGA_COLOR_LIGHT_MAGENTA);
@@ -128,7 +128,6 @@ void back_cursor(screen_t *screen) {
 
 void delete_last_char_from_current_screen() {
 	screen_t *current_screen = &screens[current_screen_index];
-	vga_entry_t empty_char = vga_color_char(' ', vga_color(VGA_COLOR_BLACK, VGA_COLOR_BLACK));
 
 	int init_x = current_screen->cursor_x;
 	int init_y = current_screen->cursor_y;
@@ -136,7 +135,7 @@ void delete_last_char_from_current_screen() {
 
 	for (;;) {
 		vga_entry_t cur_char = current_screen->buffer[current_screen->cursor_x + VGA_WIDTH * current_screen->cursor_y];
-		if (cur_char != empty_char) {
+		if (cur_char != VGA_EMPTY_ENTRY) {
 			break;
 		}
 		if (current_screen->cursor_x == init_x && current_screen->cursor_y == init_y) {
@@ -145,6 +144,6 @@ void delete_last_char_from_current_screen() {
 		back_cursor(current_screen);
 	}
 
-	current_screen->buffer[current_screen->cursor_x + VGA_WIDTH * current_screen->cursor_y] = empty_char;
-	vga_putchar(current_screen->cursor_x, current_screen->cursor_y, empty_char);
+	current_screen->buffer[current_screen->cursor_x + VGA_WIDTH * current_screen->cursor_y] = VGA_EMPTY_ENTRY;
+	vga_putchar(current_screen->cursor_x, current_screen->cursor_y, VGA_EMPTY_ENTRY);
 }
