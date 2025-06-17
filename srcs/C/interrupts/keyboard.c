@@ -46,6 +46,7 @@ char keyboard_get_char(keyboard_key_t key) {
         case KEYBOARD_KEY_SPACE: return ' ';
         case KEYBOARD_KEY_ENTER: return '\n';
         case KEYBOARD_KEY_BACKSPACE: return '\b';
+        // As we are not handling special characters, we use 11-19 for F1-F9 keys
         case KEYBOARD_KEY_F1: return 11;
         case KEYBOARD_KEY_F2: return 12;
         case KEYBOARD_KEY_F3: return 13;
@@ -64,7 +65,7 @@ void keyboard_handler() {
     send_byte_to_port(0x20, 0x20);
 
     keyboard_key_t key = KEYBOARD_KEY(scancode);
-    if (scancode == KEYBOARD_KEY_SHIFT_LEFT) {
+    if (key == KEYBOARD_KEY_SHIFT_LEFT) {
         isLeftShiftPressed = (KEYBOARD_EVENT(scancode) == KEY_PRESSED);
     } else if (KEYBOARD_EVENT(scancode) == KEY_PRESSED) {
         lastPressedChar = keyboard_get_char(key);
@@ -75,6 +76,6 @@ void keyboard_handler() {
 
 char get_last_pressed_char() {
     char c = lastPressedChar;
-    lastPressedChar = 0; // Clear the last pressed character after retrieving it
+    lastPressedChar = 0;
     return c;
 }
