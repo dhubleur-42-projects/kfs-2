@@ -12,14 +12,14 @@ OBJS		=	$(addprefix build/, $(_OBJS))
 OBJS_DEPEND	=	${OBJS:.o=.d}
 
 CC			=	clang
-CFLAGS		=   -c -target i386-unknown-elf
+CFLAGS		=   -c -target i386-unknown-elf -fno-exceptions -fno-builtin -fno-stack-protector -fno-asynchronous-unwind-tables
 INCLUDE		=	-I includes/
 
 ASMC		= nasm
 ASMFLAGS	= -felf32
 
 LINKER		= clang
-LINKERFLAGS	= -target i386-unknown-elf -fuse-ld=lld -nostdlib -static -T configs/linker.ld
+LINKERFLAGS	= -target i386-unknown-elf -fuse-ld=lld -nostdlib -static -fno-exceptions -fno-builtin -fno-stack-protector -Wl,--build-id=none -T configs/linker.ld
 
 QEMU		= qemu-system-i386
 QEMU_ARGS	= -cdrom ${ISO_NAME}
