@@ -44,4 +44,6 @@ void vga_putchar(int x, int y, vga_entry_t c);
 void vga_printf(int x, int y, vga_memory_t color, const char *fmt, ...);
 void vga_clear(void);
 
+void print_kernel_stack();
+
 #endif

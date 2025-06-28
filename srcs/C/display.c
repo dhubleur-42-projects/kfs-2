@@ -99,6 +99,46 @@ void vga_printf(int x, int y, vga_memory_t color, const char *fmt, ...) {
 					idx = vga_print_string(idx, str, color);
 					break;
 				}
+				case 'x': {
+					unsigned int hex_value = *(unsigned int *)va_list;
+					va_list++;
+					char hex_str[9];
+					hex_str[8] = '\0';
+					for (int j = 7; j >= 0; --j) {
+						int digit = hex_value & 0xF;
+						hex_str[j] = (digit < 10) ? ('0' + digit) : ('a' + digit - 10);
+						hex_value >>= 4;
+					}
+					idx = vga_print_string(idx, hex_str, color);
+					break;
+				}
+				case 'X': {
+					unsigned int hex_value = *(unsigned int *)va_list;
+					va_list++;
+					char hex_str[9];
+					hex_str[8] = '\0';
+					for (int j = 7; j >= 0; --j) {
+						int digit = hex_value & 0xF;
+						hex_str[j] = (digit < 10) ? ('0' + digit) : ('A' + digit - 10);
+						hex_value >>= 4;
+					}
+					idx = vga_print_string(idx, hex_str, color);
+					break;
+				}
+				case 'p': {
+					void *ptr_value = *(void **)va_list;
+					va_list++;
+					unsigned int hex_value = (unsigned int)ptr_value;
+					char hex_str[9];
+					hex_str[8] = '\0';
+					for (int j = 7; j >= 0; --j) {
+						int digit = hex_value & 0xF;
+						hex_str[j] = (digit < 10) ? ('0' + digit) : ('a' + digit - 10);
+						hex_value >>= 4;
+					}
+					idx = vga_print_string(idx, hex_str, color);
+					break;
+				}
 				default:
 					vga_putchar(idx % VGA_WIDTH, idx / VGA_WIDTH, vga_color_char(fmt[i], color));
 					idx++;
@@ -112,4 +152,59 @@ void vga_printf(int x, int y, vga_memory_t color, const char *fmt, ...) {
 			idx++;
 		}
 	}
+}
+
+extern uint32_t stack_bottom;
+extern uint32_t stack_top;
+
+void print_kernel_stack() {
+	vga_memory_t default_color = vga_fg_color(VGA_COLOR_LIGHT_GREY);
+    vga_memory_t header_color = vga_fg_color(VGA_COLOR_LIGHT_RED);
+    vga_memory_t stack_color = vga_fg_color(VGA_COLOR_LIGHT_GREEN);
+    vga_memory_t esp_color = vga_fg_color(VGA_COLOR_LIGHT_MAGENTA);
+
+    int y_pos = 0;
+
+    vga_printf(0, y_pos++, header_color, "KERNEL STACK DUMP:");
+    vga_printf(0, y_pos++, header_color, "Stack range: 0x%x - 0x%x",
+              &stack_bottom, &stack_top);
+
+    uint32_t current_esp;
+    asm volatile ("mov %%esp, %0" : "=r"(current_esp));
+
+    vga_printf(0, y_pos++, esp_color, "Current ESP: 0x%x", current_esp);
+
+    uint32_t stack_used = (uint32_t)(&stack_top) - current_esp;
+    vga_printf(0, y_pos++, default_color, "Stack used: %d bytes", stack_used);
+
+    y_pos++;
+
+    uint32_t* esp_ptr = (uint32_t*)current_esp;
+
+    int items_to_show = 32;
+    int items_shown = 0;
+
+    vga_printf(0, y_pos++, header_color, "Stack contents (top to bottom):");
+
+    while (esp_ptr < (uint32_t*)&stack_top && items_shown < items_to_show) {
+        if ((uint32_t)esp_ptr >= (uint32_t)&stack_bottom) {
+            uint32_t value = *esp_ptr;
+            if (esp_ptr == (uint32_t*)current_esp) {
+                vga_printf(0, y_pos++, esp_color, "> 0x%x: 0x%x",
+                          (uint32_t)esp_ptr, value);
+            } else {
+                vga_printf(0, y_pos++, stack_color, "  0x%x: 0x%x",
+                          (uint32_t)esp_ptr, value);
+            }
+            esp_ptr++;
+            items_shown++;
+        } else {
+            break;
+        }
+    }
+
+    if (items_shown < items_to_show && (uint32_t)esp_ptr < (uint32_t)&stack_bottom) {
+        y_pos++;
+        vga_printf(0, y_pos++, header_color, "... (bottom of stack reached)");
+    }
 }
