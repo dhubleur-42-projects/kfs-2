@@ -1,10 +1,25 @@
 ENTRY(start)
+
 SECTIONS {
-    .text BLOCK(4K) : ALIGN(4K)
-	{
-		*(.multiboot)
-		*(.text)
-	}
-	.data : { *(.data) }
-	.bss : { *(.bss) }
+    . = 1M;
+
+    .multiboot : {
+        *(.multiboot)
+    }
+
+    .text : {
+        *(.text)
+    }
+
+    .data : {
+        *(.data)
+    }
+
+    .bss : {
+        *(.bss)
+        . = ALIGN(16);
+        stack_bottom = .;
+        . = . + 16384;
+        stack_top = .;
+    }
 }

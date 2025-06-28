@@ -18,4 +18,6 @@ typedef enum {
 	true = 1
 } bool;
 
+typedef uint32_t size_t;
+
 #endif

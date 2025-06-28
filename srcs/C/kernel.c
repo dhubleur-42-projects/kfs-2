@@ -1,12 +1,16 @@
 #include "display.h"
 #include "interrupts.h"
 #include "keyboard.h"
+#include "gdt.h"
 
 void kernel_main() {
 	vga_clear();
 
 	idt_init();
+
 	enable_interrupts();
+
+	vga_printf(0, 0, vga_fg_color(VGA_COLOR_WHITE), "Hello world !");
 
 	for(;;) {
 		asm volatile("hlt");

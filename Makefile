@@ -9,6 +9,7 @@ C_SRCS			=	\
 					display.c \
 					io.c \
 					utils.c \
+					gdt.c \
 					$(addprefix interrupts/, \
 						idt.c \
 						pic.c \
@@ -20,7 +21,8 @@ ASMC			=	nasm
 ASMFLAGS		=	-f elf32
 ASM_SRCS		=	\
 					boot.s \
-					interrupts.s
+					interrupts.s \
+					gdt.s
 
 C_OBJS			=	$(addprefix C/,$(C_SRCS:.c=.o))
 C_OBJS_DEPEND	=	${C_OBJS:.o=.d}
