@@ -2,7 +2,9 @@ ISO_NAME	=	kfs.iso
 KERNEL_NAME	=	build/kfs.elf
 
 C_SRCS		= 	\
-				kernel.c
+				kernel.c \
+				strings.c \
+				vga.c
 
 ASM_SRCS	=	\
 				boot.s
