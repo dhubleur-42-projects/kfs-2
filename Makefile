@@ -9,7 +9,6 @@ C_SRCS			=	\
 					display.c \
 					io.c \
 					utils.c \
-					screen.c \
 					$(addprefix interrupts/, \
 						idt.c \
 						pic.c \
