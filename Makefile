@@ -3,6 +3,7 @@ KERNEL_NAME	=	build/kfs.elf
 
 C_SRCS		= 	\
 				kernel.c \
+				print_stack.c \
 				strings.c \
 				vga.c
 
@@ -14,7 +15,7 @@ OBJS		=	$(addprefix build/, $(_OBJS))
 OBJS_DEPEND	=	${OBJS:.o=.d}
 
 CC			=	clang
-CFLAGS		=   -c -target i386-unknown-elf -fno-exceptions -fno-builtin -fno-stack-protector -fno-asynchronous-unwind-tables
+CFLAGS		=   -c -target i386-unknown-elf -fno-exceptions -fno-builtin -fno-stack-protector -fno-asynchronous-unwind-tables -masm=intel
 INCLUDE		=	-I includes/
 
 ASMC		= nasm
