@@ -18,7 +18,7 @@ void set_gate(uint8_t i_gate, uint32_t offset, uint16_t seg_selector_index, uint
 	descriptor_lo |= (SEG_SELECTOR(seg_selector_index, seg_selector_ti, seg_selector_rpl) << 16); //TODO Inside struct for seg?
 
 	descriptor_hi = ((flags & 0xFF) << 8);
-	descriptor_hi = ((offset & 0xFFFF0000) << (16-16));
+	descriptor_hi |= ((offset & 0xFFFF0000) << (16-16));
 
 	terminal_writestring("------ DESC -----\n");
 	terminal_writestring("0x");
