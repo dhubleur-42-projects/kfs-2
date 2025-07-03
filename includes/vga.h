@@ -29,6 +29,7 @@ enum vga_color {
 };
 
 void terminal_initialize(void);
+void terminal_write_hex(uint32_t nbr);
 void terminal_writestring(const char* data);
 void terminal_write(const char* data, size_t size);
 void terminal_putchar(char c);

@@ -27,6 +27,16 @@ void terminal_initialize(void)
 	}
 }
 
+void terminal_write_hex(uint32_t nbr)
+{
+	const char *HEX_DIGITS = "0123456789ABCDEF";
+
+	if (nbr == 0)
+		return;
+	terminal_write_hex(nbr / 16);
+	terminal_putchar(HEX_DIGITS[nbr % 16]);
+}
+
 void terminal_writestring(const char* data)
 {
 	terminal_write(data, strlen(data));

@@ -1,7 +1,6 @@
 #include "vga.h"
 #include "idt.h"
-
-void print_stack();
+#include "print_stack.h"
 
 void kernel_main(void)
 {
