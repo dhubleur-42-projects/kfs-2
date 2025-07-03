@@ -5,10 +5,12 @@ C_SRCS		= 	\
 				kernel.c \
 				print_stack.c \
 				strings.c \
-				vga.c
+				vga.c \
+				idt.c
 
 ASM_SRCS	=	\
-				boot.s
+				boot.s \
+				io.s
 
 _OBJS		=	${C_SRCS:.c=.o} ${ASM_SRCS:.s=.o}
 OBJS		=	$(addprefix build/, $(_OBJS))

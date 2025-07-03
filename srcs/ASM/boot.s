@@ -39,6 +39,10 @@ gdtr:
 resw 1	; limit
 resd 1	; base
 
+idtr:
+resw 1	; limit
+resd 1	; base
+
 section .gdt
 gdt_table:
 dq 0x0000000000000000 ; NULL Entry
@@ -49,6 +53,12 @@ dq 0x00CFFA000000FFFF ; User code segment
 dq 0x00CFF2000000FFFF ; User data segment
 dq 0x00CFF2000000FFFF ; User stack segment
 gdt_table_size: equ $ - gdt_table
+
+section .idt
+global idt_table
+idt_table:
+resq 256
+idt_table_size: equ $ - idt_table
 
 ; The linker script specifies _start as the entry point to the kernel and the
 ; bootloader will jump to this position once the kernel has been loaded. It
@@ -82,6 +92,11 @@ _start:
 	; C++ features such as global constructors and exceptions will require
 	; runtime support to work as well.
 	call setup_gdt
+
+	; Initialize idt
+	mov WORD [idtr], idt_table_size - 1
+	mov DWORD [idtr + 2], idt_table
+	lidt [idtr]
 
 	; Enter the high-level kernel. The ABI requires the stack is 16-byte
 	; aligned at the time of the call instruction (which afterwards pushes
