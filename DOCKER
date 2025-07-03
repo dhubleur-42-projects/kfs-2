@@ -1,0 +1,33 @@
+docker run -it --volume .:/kfs-2 debian bash
+root@b1e25de853e5:/kfs-2# history
+    1  ls
+    2  ls kfs-2/
+    3  cd kfs-2/
+    4  make
+    5  apt update && apt install make clang lld
+    6  make
+    7  apt install gcc
+    8  make
+    9  apt install grub-mkrescue
+   10  apt install grub-common
+   11  make
+   12  apt install xorriso
+   13  make
+   14  history
+   15  apt install grub-pc-bin
+   16  make re
+   17  make fclean
+   18  make
+   19  apt install gcc-multilib
+   20  make
+   21  vim srcs/C/print_stack.c 
+   22  vi srcs/C/print_stack.c 
+   23  apt install vim
+   24  vi srcs/C/print_stack.c 
+   25  make
+   26  make fclean
+   27  make
+   28  apt install nasm
+   29  make fclean
+   30  make
+   31  history

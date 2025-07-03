@@ -2,11 +2,12 @@ ISO_NAME	=	kfs.iso
 KERNEL_NAME	=	build/kfs.elf
 
 C_SRCS		= 	\
+				idt.c \
 				kernel.c \
+				pic.c \
 				print_stack.c \
 				strings.c \
-				vga.c \
-				idt.c
+				vga.c
 
 ASM_SRCS	=	\
 				boot.s \
@@ -64,6 +65,6 @@ re		:	fclean
 			make ${ISO_NAME}
 
 boot	:	${ISO_NAME}
-	qemu-system-i386 -s -S -cdrom ${ISO_NAME}
+	qemu-system-i386 -cdrom ${ISO_NAME}
 
 .PHONY	:	all clean fclean re boot
