@@ -60,11 +60,15 @@ void clear_screen(int index) {
 
 	int instr1_length = 18;
 	for (int i = 0; i < instr1_length; i++) {
-		screen->buffer[2 + VGA_WIDTH * 23 + i] = vga_color_char("Type what you want"[i], text_color3);
+		screen->buffer[2 + VGA_WIDTH * 22 + i] = vga_color_char("Type what you want"[i], text_color3);
 	}
 	int instr2_length = 29;
 	for (int i = 0; i < instr2_length; i++) {
-		screen->buffer[2 + VGA_WIDTH * 24 + i] = vga_color_char("Press F1-F9 to switch screens"[i], text_color3);
+		screen->buffer[2 + VGA_WIDTH * 23 + i] = vga_color_char("Press F1-F9 to switch screens"[i], text_color3);
+	}
+	int instr3_length = 24;
+	for (int i = 0; i < instr3_length; i++) {
+		screen->buffer[2 + VGA_WIDTH * 24 + i] = vga_color_char("F9 is the command screen"[i], text_color3);
 	}
 
 	if (index == current_screen_index) {
@@ -146,4 +150,23 @@ void delete_last_char_from_current_screen() {
 
 	current_screen->buffer[current_screen->cursor_x + VGA_WIDTH * current_screen->cursor_y] = VGA_EMPTY_ENTRY;
 	vga_putchar(current_screen->cursor_x, current_screen->cursor_y, VGA_EMPTY_ENTRY);
+}
+
+int get_current_screen_index()
+{
+	return current_screen_index;
+}
+
+void get_current_screen_line(uint8_t y, char line_buf[80])
+{
+	for (int i = 0; i < 80; i++)
+	{
+		line_buf[i] = screens[current_screen_index].buffer[y * VGA_WIDTH + i];
+	}
+}
+
+void get_current_pos(uint8_t *x, uint8_t *y)
+{
+	*x = screens[current_screen_index].cursor_x;
+	*y = screens[current_screen_index].cursor_y;
 }

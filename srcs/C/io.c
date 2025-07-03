@@ -17,3 +17,11 @@ uint8_t read_byte_from_port(uint16_t port) {
 	);
 	return value;
 }
+
+void send_short_to_port(uint16_t port, uint16_t value) {
+	asm volatile (
+		"outw %%ax, %%dx"
+		:
+		: "a"(value), "d"(port)
+	);
+}

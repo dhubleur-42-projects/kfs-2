@@ -18,6 +18,7 @@ section .text
 		mov esp, stack_top
 		call kernel_main
 
+global stack_top
 section .bss
 	align 16
 	stack_bottom:

@@ -5,11 +5,12 @@ ifeq ($(BONUS), 1)
 endif
 INCLUDES		=	-I includes/
 C_SRCS			=	\
-					kernel.c \
+					command.c \
 					display.c \
 					io.c \
-					utils.c \
+					kernel.c \
 					screen.c \
+					utils.c \
 					$(addprefix interrupts/, \
 						idt.c \
 						pic.c \
