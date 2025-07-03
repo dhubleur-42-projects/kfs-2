@@ -6,14 +6,29 @@
 extern uint32_t idt_table;
 
 //TODO AVOID uint64_t
-void set_gate(uint8_t i_gate, uint32_t offset, uint16_t seg_selector_index, uint64_t flags)
+void set_gate(uint8_t i_gate, uint32_t offset, uint16_t seg_selector_index, uint8_t seg_selector_ti, uint8_t seg_selector_rpl, uint8_t flags)
 {
-    uint64_t descriptor;
+    uint32_t descriptor_lo;
+    uint32_t descriptor_hi;
+
 	uint32_t *tmp_address; //TEMP
 	tmp_address = &idt_table;
-	descriptor = GATE_OFFSET(offset) | SEG_SELECTOR_INDEX(seg_selector_index) | flags;
-	tmp_address[i_gate*2+1] = (descriptor & 0xFFFFFFFF00000000) >> 32;
-	tmp_address[i_gate*2] = descriptor & 0xFFFFFFFF;
+
+	descriptor_lo = offset & 0xFFFF;
+	descriptor_lo |= (SEG_SELECTOR(seg_selector_index, seg_selector_ti, seg_selector_rpl) << 16); //TODO Inside struct for seg?
+
+	descriptor_hi = ((flags & 0xFF) << 8);
+	descriptor_hi = ((offset & 0xFFFF0000) << (16-16));
+
+	terminal_writestring("------ DESC -----\n");
+	terminal_writestring("0x");
+	terminal_write_hex(descriptor_hi);
+	terminal_putchar('\n');
+	terminal_writestring("0x");
+	terminal_write_hex(descriptor_lo);
+	terminal_putchar('\n');
+	tmp_address[i_gate*2+1] = descriptor_hi;
+	tmp_address[i_gate*2] = descriptor_lo;
 }
 
 __attribute__ ((interrupt))
@@ -26,6 +41,7 @@ void interrupt_keyboard_handler (struct interrupt_frame *frame)
 	terminal_writestring("OMG");
 }
 
+#if 0
 void pouet()
 {
 	asm volatile("cli"); //TEMP
@@ -40,3 +56,4 @@ void pouet()
 		asm volatile("hlt"); //TEMP
 	}
 }
+#endif

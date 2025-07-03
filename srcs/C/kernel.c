@@ -8,7 +8,7 @@ void kernel_main(void)
 	terminal_writestring("42\n");
 	print_stack();
 	PIC_remap();
-	set_gate(33, (uint32_t)&interrupt_keyboard_handler, 1, INTERRUPT_PL0);
+	set_gate(33, (uint32_t)&interrupt_keyboard_handler, 1, 0, 0, INTERRUPT_PL0);
 	asm volatile("sti");
 	while (1)
 	{
