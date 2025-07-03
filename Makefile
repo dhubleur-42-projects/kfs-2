@@ -15,7 +15,7 @@ OBJS		=	$(addprefix build/, $(_OBJS))
 OBJS_DEPEND	=	${OBJS:.o=.d}
 
 CC			=	clang
-CFLAGS		=   -c -target i386-unknown-elf -fno-exceptions -fno-builtin -fno-stack-protector -fno-asynchronous-unwind-tables -masm=intel
+CFLAGS		=   -c -target i386-unknown-elf -fno-exceptions -fno-builtin -fno-stack-protector -fno-asynchronous-unwind-tables -masm=intel -g3
 INCLUDE		=	-I includes/
 
 ASMC		= nasm
@@ -62,6 +62,6 @@ re		:	fclean
 			make ${ISO_NAME}
 
 boot	:	${ISO_NAME}
-	qemu-system-i386 -cdrom ${ISO_NAME}
+	qemu-system-i386 -s -S -cdrom ${ISO_NAME}
 
 .PHONY	:	all clean fclean re boot
