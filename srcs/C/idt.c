@@ -10,9 +10,9 @@ void set_gate(uint8_t i_gate, uint32_t offset, uint16_t seg_selector_index, uint
 {
     uint32_t descriptor_lo;
     uint32_t descriptor_hi;
+	uint32_t *idt_table_ptr;
 
-	uint32_t *tmp_address; //TEMP
-	tmp_address = &idt_table;
+	idt_table_ptr = &idt_table;
 
 	descriptor_lo = offset & 0xFFFF;
 	descriptor_lo |= (SEG_SELECTOR(seg_selector_index, seg_selector_ti, seg_selector_rpl) << 16); //TODO Inside struct for seg?
@@ -20,15 +20,8 @@ void set_gate(uint8_t i_gate, uint32_t offset, uint16_t seg_selector_index, uint
 	descriptor_hi = ((flags & 0xFF) << 8);
 	descriptor_hi |= ((offset & 0xFFFF0000) << (16-16));
 
-	terminal_writestring("------ DESC -----\n");
-	terminal_writestring("0x");
-	terminal_write_hex(descriptor_hi);
-	terminal_putchar('\n');
-	terminal_writestring("0x");
-	terminal_write_hex(descriptor_lo);
-	terminal_putchar('\n');
-	tmp_address[i_gate*2+1] = descriptor_hi;
-	tmp_address[i_gate*2] = descriptor_lo;
+	idt_table_ptr[i_gate*2+1] = descriptor_hi;
+	idt_table_ptr[i_gate*2] = descriptor_lo;
 }
 
 __attribute__ ((interrupt))
@@ -40,20 +33,3 @@ void interrupt_keyboard_handler (struct interrupt_frame *frame)
 	io_outb(0x20,0x20);
 	terminal_writestring("OMG");
 }
-
-#if 0
-void pouet()
-{
-	asm volatile("cli"); //TEMP
-	for (int i = 1; i < 255; i++)
-	{
-		set_gate(i, (uint32_t)&interrupt_keyboard_handler, 2, INTERRUPT_PL0);
-	}
-	asm volatile("sti"); //TEMP
-
-	while (1)
-	{
-		asm volatile("hlt"); //TEMP
-	}
-}
-#endif

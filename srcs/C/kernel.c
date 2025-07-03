@@ -12,6 +12,6 @@ void kernel_main(void)
 	asm volatile("sti");
 	while (1)
 	{
-		asm volatile("hlt"); //TEMP
+		asm volatile("hlt");
 	}
 }
