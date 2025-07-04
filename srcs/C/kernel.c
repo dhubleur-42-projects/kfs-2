@@ -11,18 +11,16 @@ static void handle_typed_char(char c);
 void kernel_main() {
 #ifndef BONUS
 
-	vga_clear();
-	vga_putchar(0, 0, vga_char('4'));
-	vga_putchar(1, 0, vga_char('2'));
+	print_stack();
 	asm volatile("hlt");
 
 #else
 
-	vga_clear();
-	reset_screens();
-
 	idt_init();
 	enable_interrupts();
+
+	vga_clear();
+	reset_screens();
 
 	for(;;) {
 		asm volatile("hlt");

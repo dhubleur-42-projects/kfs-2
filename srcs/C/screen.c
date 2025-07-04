@@ -1,7 +1,7 @@
 #include "screen.h"
 
 screen_t screens[SCREEN_COUNT];
-int current_screen_index = 0;
+int current_screen_index = 8;
 
 void print_screen_to_vga(int index) {
 	if (index < 0 || index >= SCREEN_COUNT) {

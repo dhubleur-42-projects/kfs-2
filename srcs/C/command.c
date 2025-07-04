@@ -8,7 +8,6 @@ int cmd_equals(char *cmd1, char *cmd2);
 void reboot();
 void halt();
 static void print_hex_nbr(uint32_t nbr);
-void print_stack();
 void clear_all_screen();
 
 void handle_command()
