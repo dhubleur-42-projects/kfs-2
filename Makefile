@@ -40,16 +40,16 @@ KERNEL_ISO		=	kernel.iso
 DOCKER_IMAGE	=	kfs_build_tools
 
 
+build: docker_image
+	docker run -v $(PWD):/project -w /project -it $(DOCKER_IMAGE) make all
+
 all:	$(KERNEL_ISO)
 
 docker_image:
 	docker build -t $(DOCKER_IMAGE) tools/
 
-build: docker_image
-	docker run -v $(PWD):/project -w /project -it $(DOCKER_IMAGE) make
-
 build_bonus: docker_image
-	docker run -v $(PWD):/project -w /project -it $(DOCKER_IMAGE) make BONUS=1
+	docker run -v $(PWD):/project -w /project -it $(DOCKER_IMAGE) make BONUS=1 all
 
 $(KERNEL_BIN): $(OBJS)
 	$(LD) $(LDFLAGS) -o $(KERNEL_BIN) $(OBJS)

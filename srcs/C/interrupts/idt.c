@@ -1,7 +1,5 @@
 #include "interrupts.h"
 
-extern void debug_print(const char* str);
-
 idt_entry_t idt[IDT_SIZE];
 idt_ptr_t idtp;
 
