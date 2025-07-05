@@ -1,5 +1,5 @@
-CC				=	gcc
-CFLAGS			=	-m32 -Wall -Wextra -Werror -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs
+CC				=	clang
+CFLAGS			=	-c -target i386-unknown-elf -fno-exceptions -fno-builtin -fno-stack-protector -fno-asynchronous-unwind-tables -masm=intel -g
 ifeq ($(BONUS), 1)
 	CFLAGS		+= -D BONUS
 endif
@@ -30,9 +30,9 @@ ASM_OBJS		=	$(addprefix ASM/,$(ASM_SRCS:.s=.o))
 _OBJS			=	$(C_OBJS) $(ASM_OBJS)
 OBJS			=	$(addprefix build/,$(_OBJS))
 
-LD				=	ld
+LD				=	clang
 LD_FILE			=	linker.ld
-LDFLAGS			=	-m elf_i386 -T $(LD_FILE)
+LDFLAGS			=	-target i386-unknown-elf -fuse-ld=lld -nostdlib -static -fno-exceptions -fno-builtin -fno-stack-protector -Wl,--build-id=none -T linker.ld -masm=intel
 
 KERNEL_BIN		=	iso/boot/kernel.bin
 KERNEL_ISO		=	kernel.iso
